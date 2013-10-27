@@ -1,16 +1,31 @@
+#pragma once
+
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 #include <string>
 
-	
-	public class settings
+//#ifndef _SETTINGS
+//#define _SETTINGS
+//
+//struct Settings
+//{
+//	int size;
+//	int level;
+//}settings;
+//
+//#endif
+	public class Settings
 	{
 	public:
-		static int size,level;
-		//void click (System::Object^  sender, System::EventArgs^  e) {
-		//	
-		//}
+		int size,level;
+	
 	};
+	
+	extern Settings settings;
+
+	//void click (System::Object^  sender, System::EventArgs^  e) {
+	//	
+	//}
 
 	public ref class cell : public System::Windows::Forms::Button {
 		char c_color; //n - neutral; r - red; b - blue;
@@ -32,6 +47,22 @@
 				explode=true;
 			c_color=p_color;
 			return explode;
+		}
+
+		void ChValue (int valu3) {
+			value=valu3;
+		}
+
+		int GetValue () {
+			return value;
+		}
+
+		int GetThr () {
+			return thr;
+		}
+
+		void ChColor (char c_c0l0r) {
+			c_color=c_c0l0r;
 		}
 
 
@@ -79,64 +110,64 @@
 	return Found;*/
 	}
 
-			void explosion (int size, int pos, char p_color) {
-		FindVar(pos)->n->value=0;
-		FindVar(pos)->n->c_color='n';
+		void explosion (int size, int pos, char p_color) {
+		(*(*FindVar(pos))->n)->ChValue(0);
+		(*(*FindVar(pos))->n)->ChColor('n');
 		if (pos<size-1)
-			FindVar(pos+1)->n->inc(p_color);
+			(*(*FindVar(pos+1))->n)->inc(p_color);
 		if (pos>0)
-			FindVar(pos-1)->n->inc(p_color);
+			(*(*FindVar(pos-1))->n)->inc(p_color);
 		if (pos<(size^2-size))
-			FindVar(pos+size)->n->inc(p_color);
+			(*(*FindVar(pos+size))->n)->inc(p_color);
 		if (pos>=size)
-			FindVar(pos-size)->n->inc(p_color);
+			(*(*FindVar(pos-size))->n)->inc(p_color);
 	}
 
 		bool danger (int size, int pos) {
 		bool danger=false;
-		if (FindVar(pos)->n->value==FindVar(pos)->n->thr) {
+		if ((*(*FindVar(pos))->n)->GetValue()==(*(*FindVar(pos))->n)->GetThr()) {
 			danger=true;
 			return danger;
 		}
 		if (pos<size-1)
-			if (FindVar(pos+1)->n->value==FindVar(pos+1)->n->thr) {
+			if ((*(*FindVar(pos+1))->n)->GetValue()==(*(*FindVar(pos+1))->n)->GetThr()) {
 				danger=true;
 				return danger;
 			}	
 		if (pos>0)
-			if (FindVar(pos-1)->n->value==FindVar(pos-1)->n->thr) {
+			if ((*(*FindVar(pos-1))->n)->GetValue()==(*(*FindVar(pos-1))->n)->GetThr()) {
 				danger=true;
 				return danger;
 			}
 		if (pos<(size^2-size))
-			if (FindVar(pos+size)->n->value==FindVar(pos+size)->n->thr) {
+			if ((*(*FindVar(pos+size))->n)->GetValue()==(*(*FindVar(pos+size))->n)->GetThr()) {
 				danger=true;
 				return danger;
 			}
 		if (pos>=size)
-			if (FindVar(pos-size)->n->value==FindVar(pos)->n->thr)
+			if ((*(*FindVar(pos-size))->n)->GetValue()==(*(*FindVar(pos-size))->n)->GetThr())
 				danger=true;	
 		return danger;
 	}
 
 		void ai (int size, int level) {
-		#define plus FindVar(i)->n->inc('r')
+		#define plus (*(*FindVar(i))->n)->inc('r')
 		srand(time(NULL));
 		for (int i=0; i<(size*size); i++) {
 			// dont make the cell explodable
-			if (!(FindVar(i)->n->value==(FindVar(i)->n->thr)-1))
+			if (!((*(*FindVar(i))->n)->GetValue()==(*(*FindVar(i))->n)->GetThr()-1))
 				switch (level) {
 					case 0:
 					plus;
 					break;
 					case 1:
 					// 50-50 decision
-					if ((rand()%1)&&(!(danger(m, size, i))))
+					if ((rand()%1)&&(!(danger(size, i))))
 						plus;
 					break;
 					case 2:
 					// check if it can be *safely* exploded
-					if (!(danger(m, size, i)))
+					if (!(danger(size, i)))
 						plus;					
 				}
 		}
@@ -154,7 +185,7 @@
 	};
 
 	struct game {
-		bool turn; //false - blue
+		bool q; //false - blue
 		int w_score; //score enough to win
 		int size;  // select (4/6/8) square width
 		int level; // AI level
@@ -173,7 +204,7 @@
 				who_won='b';
 			if ((player2.p_color>=w_score)&&(player2.score>player1.score))
 				who_won='r';
-			turn=!turn;
+			q=!q;
 			return who_won;
 		}
 		

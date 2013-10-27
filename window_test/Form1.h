@@ -86,11 +86,7 @@ namespace window_test {
 				 props ^ n_g = gcnew props();
 				 n_g->Visible=true;
 			}
-		private: System::Void props_FormClosed(System::Object^  sender, System::Windows::Forms::FormClosedEventArgs^  e) {
-			game* curr;
-			curr = new game(settings::size, settings::level);
-			curr->draw();
-		}	
+
 
 	};
 }

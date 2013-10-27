@@ -76,8 +76,8 @@ namespace window_test {
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
-			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->radioButton7 = (gcnew System::Windows::Forms::RadioButton());
+			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->panel1->SuspendLayout();
 			this->panel2->SuspendLayout();
 			this->SuspendLayout();
@@ -202,15 +202,6 @@ namespace window_test {
 			this->panel2->Size = System::Drawing::Size(194, 107);
 			this->panel2->TabIndex = 10;
 			// 
-			// label3
-			// 
-			this->label3->AutoSize = true;
-			this->label3->Location = System::Drawing::Point(120, 0);
-			this->label3->Name = L"label3";
-			this->label3->Size = System::Drawing::Size(27, 13);
-			this->label3->TabIndex = 8;
-			this->label3->Text = L"PvP";
-			// 
 			// radioButton7
 			// 
 			this->radioButton7->AutoSize = true;
@@ -221,6 +212,15 @@ namespace window_test {
 			this->radioButton7->TabStop = true;
 			this->radioButton7->Text = L"Human";
 			this->radioButton7->UseVisualStyleBackColor = true;
+			// 
+			// label3
+			// 
+			this->label3->AutoSize = true;
+			this->label3->Location = System::Drawing::Point(120, 0);
+			this->label3->Name = L"label3";
+			this->label3->Size = System::Drawing::Size(27, 13);
+			this->label3->TabIndex = 8;
+			this->label3->Text = L"PvP";
 			// 
 			// props
 			// 
@@ -254,12 +254,17 @@ namespace window_test {
 					 level=0;
 				 else if (radioButton5->Checked)
 					 level=1;
-				 settings::level=level;
-				 settings::size=size;
+				 settings.level=level;
+				 settings.size=size;
 				 props ^ n_g = this;
 				 n_g->Close();
 			 }
 			 
+			 private: System::Void props_FormClosed(System::Object^  sender, System::Windows::Forms::FormClosedEventArgs^  e) {
+			 game* curr;
+			 curr = new game(settings.size, settings.level);
+			curr->draw();
+		 }
 
 };
 }
