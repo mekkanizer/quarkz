@@ -1,7 +1,5 @@
 #pragma once
 
-#include "props.h"
-
 namespace window_test {
 
 	using namespace System;
@@ -82,10 +80,7 @@ namespace window_test {
 		}
 #pragma endregion
 
-	private: System::Void sett_Click(System::Object^  sender, System::EventArgs^  e) {
-				 props ^ n_g = gcnew props();
-				 n_g->Visible=true;
-			}
+		System::Void sett_Click(System::Object^  sender, System::EventArgs^  e) ;
 
 
 	};

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "settings.h"
 
 namespace window_test {
 
@@ -50,8 +49,10 @@ namespace window_test {
 	private: System::Windows::Forms::Panel^  panel2;
 	private: System::Windows::Forms::RadioButton^  radioButton7;
 	private: System::Windows::Forms::Label^  label3;
-	protected: 
-
+	
+	public: 
+		Form1 ^ ptr;
+		Form1 ^ window;
 	private:
 		/// <summary>
 		/// Требуется переменная конструктора.
@@ -232,7 +233,7 @@ namespace window_test {
 			this->Controls->Add(this->button1);
 			this->Name = L"props";
 			this->Text = L"props";
-			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &props::props_FormClosed);
+			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &props::props_FormClosed, ptr);
 			this->panel1->ResumeLayout(false);
 			this->panel1->PerformLayout();
 			this->panel2->ResumeLayout(false);
@@ -241,30 +242,7 @@ namespace window_test {
 
 		}
 #pragma endregion
-	
-	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
-				 int size=8,level=2;
-				 if (radioButton1->Checked)
-					 size=4;
-				 else if (radioButton2->Checked)
-					 size=6;
-				 if (radioButton7->Checked)
-					 level=-1;
-				 else if (radioButton4->Checked)
-					 level=0;
-				 else if (radioButton5->Checked)
-					 level=1;
-				 settings.level=level;
-				 settings.size=size;
-				 props ^ n_g = this;
-				 n_g->Close();
-			 }
-			 
-			 private: System::Void props_FormClosed(System::Object^  sender, System::Windows::Forms::FormClosedEventArgs^  e) {
-			 game* curr;
-			 curr = new game(settings.size, settings.level);
-			curr->draw();
-		 }
-
+		System::Void props::button1_Click(System::Object^  sender, System::EventArgs^  e);
+		System::Void props_FormClosed(System::Object^  sender, System::Windows::Forms::FormClosedEventArgs^  e, Form1^ ptr);
 };
 }

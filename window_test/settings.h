@@ -4,16 +4,6 @@
 #include <time.h>       /* time */
 #include <string>
 
-//#ifndef _SETTINGS
-//#define _SETTINGS
-//
-//struct Settings
-//{
-//	int size;
-//	int level;
-//}settings;
-//
-//#endif
 	public class Settings
 	{
 	public:
@@ -22,6 +12,13 @@
 	};
 	
 	extern Settings settings;
+
+	/*
+		таймер, либо в начале ф-ии клика что-то вроде
+		if(timeGetTime()-startWaitingTime<1000)return;
+		startWaitingTime - интегер, в котором записан момент времени, с которого началась пауза
+		timeGetTime() - функция, возвращающая прошедшее кол-во мс с начала работы проги
+	*/
 
 	//void click (System::Object^  sender, System::EventArgs^  e) {
 	//	
