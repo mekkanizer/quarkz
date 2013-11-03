@@ -12,7 +12,7 @@ Settings settings;
 
 using namespace window_test;
 
-	System::Void props::button1_Click(System::Object^  sender, System::EventArgs^  e) {
+	System::Void props<Form1>::button1_Click(System::Object^  sender, System::EventArgs^  e) {
 				 int size=8,level=2;
 				 if (radioButton1->Checked)
 					 size=4;
@@ -30,7 +30,7 @@ using namespace window_test;
 			 }
 
 			 
-	 System::Void props::props_FormClosed(System::Object^  sender, System::Windows::Forms::FormClosedEventArgs^  e, Form1^ ptr) {
+	 System::Void props<Form1>::props_FormClosed(System::Object^  sender, System::Windows::Forms::FormClosedEventArgs^  e, Form1^ ptr) {
 			 game* curr;
 			 curr = new game(settings.size, settings.level);
 			 TLVar array=curr->draw(); 
@@ -38,14 +38,14 @@ using namespace window_test;
 			var = (*array.FindVar(0));
 			if (var) do
 			{
-				ptr->Controls->Add(var->n);
+				ptr->Controls->Add(*(var->n));
 				var=var->next;
 			} while (var);
 
 		 }
 
 	 System::Void Form1::sett_Click(System::Object^  sender, System::EventArgs^  e) {
-				 props ^ n_g = gcnew props();
+				 props<Form1> ^ n_g = gcnew props<Form1>();
 				 n_g->Visible=true;
 				 n_g->ptr=n_g->window;
 			}
@@ -58,7 +58,7 @@ int main(array<System::String ^> ^args)
 	Application::SetCompatibleTextRenderingDefault(false); 
 
 	// Создание главного окна и его запуск
-	props ^ temp0;
+	props<Form1> ^ temp0;
 	Application::Run(temp0->window=gcnew Form1());
 	return 0;
 }

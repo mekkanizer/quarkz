@@ -13,6 +13,12 @@
 	
 	extern Settings settings;
 
+	ref class random:public System::Windows::Forms::FormClosedEventArgs {
+	Form1^ ptr;
+	public:
+		random(Form1^ pointer):ptr(pointer),FormClosedEventArgs(){};
+	}
+
 	/*
 		таймер, либо в начале ф-ии клика что-то вроде
 		if(timeGetTime()-startWaitingTime<1000)return;

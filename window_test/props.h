@@ -3,6 +3,7 @@
 
 namespace window_test {
 
+
 	using namespace System;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
@@ -13,7 +14,7 @@ namespace window_test {
 	/// <summary>
 	/// Сводка для props
 	/// </summary>
-
+	template <class Form1>
 	public ref class props : public System::Windows::Forms::Form
 	{
 	public:
@@ -56,7 +57,7 @@ namespace window_test {
 	private:
 		/// <summary>
 		/// Требуется переменная конструктора.
-		/// </summary>
+		/// </summary11>
 		System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
@@ -233,6 +234,7 @@ namespace window_test {
 			this->Controls->Add(this->button1);
 			this->Name = L"props";
 			this->Text = L"props";
+			
 			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &props::props_FormClosed, ptr);
 			this->panel1->ResumeLayout(false);
 			this->panel1->PerformLayout();
