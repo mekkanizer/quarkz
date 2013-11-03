@@ -40,6 +40,11 @@ local.properties
 *.suo
 *.user
 *.sln.docstates
+*.rtf
+*.ico
+*.rc
+*.resX
+*.resx
 
 # Build results
 
