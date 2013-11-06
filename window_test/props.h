@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include "settings.h"
 namespace window_test {
 
 
@@ -52,7 +52,6 @@ namespace window_test {
 	private: System::Windows::Forms::Label^  label3;
 	
 	public: 
-		Form1 ^ ptr;
 		Form1 ^ window;
 	private:
 		/// <summary>
@@ -234,8 +233,8 @@ namespace window_test {
 			this->Controls->Add(this->button1);
 			this->Name = L"props";
 			this->Text = L"props";
-			
-			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &props::props_FormClosed, ptr);
+//			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &props::props_FormClosed);
+			this->VisibleChanged += gcnew System::EventHandler(this, &props::props_VisibleChanged);
 			this->panel1->ResumeLayout(false);
 			this->panel1->PerformLayout();
 			this->panel2->ResumeLayout(false);
@@ -245,6 +244,6 @@ namespace window_test {
 		}
 #pragma endregion
 		System::Void props::button1_Click(System::Object^  sender, System::EventArgs^  e);
-		System::Void props_FormClosed(System::Object^  sender, System::Windows::Forms::FormClosedEventArgs^  e, Form1^ ptr);
+		System::Void props_VisibleChanged(System::Object^  sender, System::EventArgs^  e);
 };
 }

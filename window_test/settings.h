@@ -13,18 +13,18 @@
 	
 	extern Settings settings;
 
-	ref class random:public System::Windows::Forms::FormClosedEventArgs {
-	Form1^ ptr;
-	public:
-		random(Form1^ pointer):ptr(pointer),FormClosedEventArgs(){};
-	}
+	//ref class random:public System::Windows::Forms::FormClosedEventArgs {
+	//Form1^ window;
+	//public:
+	//	random(Form1^ pointer) :window(pointer), FormClosedEventArgs(System::Windows::Forms::CloseReason()){};
+	//};
 
-	/*
-		таймер, либо в начале ф-ии клика что-то вроде
-		if(timeGetTime()-startWaitingTime<1000)return;
-		startWaitingTime - интегер, в котором записан момент времени, с которого началась пауза
-		timeGetTime() - функция, возвращающая прошедшее кол-во мс с начала работы проги
-	*/
+	
+		//таймер, либо в начале ф-ии клика что-то вроде
+		//if(timeGetTime()-startWaitingTime<1000)return;
+		//startWaitingTime - интегер, в котором записан момент времени, с которого началась пауза
+		//timeGetTime() - функция, возвращающая прошедшее кол-во мс с начала работы проги
+	
 
 	//void click (System::Object^  sender, System::EventArgs^  e) {
 	//	
@@ -72,9 +72,9 @@
 
 	};
 
-	struct TVar {
-	cell ^* n;
-	TVar *next;
+	ref struct TVar {
+	cell^ n; 
+	TVar^ next;
 	};
 
 	class TLVar {
@@ -85,17 +85,16 @@
 	First=0;
 	}
 
-	bool NewVar (char c_c0l0r, int thr35h0ld, int valu3, int xx, int yy) {
-	TVar * n;
-	n = new TVar;
-	if (n)
-	{
-		cell^ x=gcnew cell(c_c0l0r, thr35h0ld, valu3, xx, yy);
-	  n->n = &x;
-		n->next = First;
-		First = n;
-	}
-	return n;
+	bool NewVar(char c_c0l0r, int thr35h0ld, int valu3, int xx, int yy) {
+		TVar * n = new TVar();
+		if (n)
+		{
+			cell^ x = gcnew cell(c_c0l0r, thr35h0ld, valu3, xx, yy);
+			n->n = x;
+			n->next = First;
+			First = n;
+		}
+		return n;
 	}
 
 	TVar** FindVar (int pos, TVar* First=0) {
