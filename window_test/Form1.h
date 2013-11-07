@@ -35,6 +35,7 @@ namespace window_test {
 			}
 		}
 	private: System::Windows::Forms::Button^  sett;
+	public: System::Windows::Forms::Panel^  panel1;
 
 
 	protected: 
@@ -54,6 +55,7 @@ namespace window_test {
 		void InitializeComponent(void)
 		{
 			this->sett = (gcnew System::Windows::Forms::Button());
+			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->SuspendLayout();
 			// 
 			// sett
@@ -67,11 +69,19 @@ namespace window_test {
 			this->sett->UseVisualStyleBackColor = false;
 			this->sett->Click += gcnew System::EventHandler(this, &Form1::sett_Click);
 			// 
+			// panel1
+			// 
+			this->panel1->Location = System::Drawing::Point(50, 50);
+			this->panel1->Name = L"panel1";
+			this->panel1->Size = System::Drawing::Size(550, 550);
+			this->panel1->TabIndex = 1;
+			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(653, 626);
+			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->sett);
 			this->Name = L"Form1";
 			this->Text = L"Form1";

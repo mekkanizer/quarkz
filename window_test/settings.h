@@ -36,10 +36,8 @@
 		int value;
 	public:
 		cell (char c_c0l0r, int thr35h0ld, int valu3, int xx, int yy):c_color(c_c0l0r),thr(thr35h0ld),value(valu3) {
-			Size.Width=50;
-			Size.Height=50;
-			Location.X=xx*50;
-			Location.Y=yy*50;
+			Size = System::Drawing::Size(50, 50);
+			Location = System::Drawing::Point(xx*50, yy*50);
 			//text=(std::to_string(value));
 			//Click += gcnew System::EventHandler(this, &Form1::sett_Click);
 		}
@@ -77,16 +75,20 @@
 	TVar^ next;
 	};
 
-	class TLVar {
+	ref class TLVar {
 	private:
-	TVar *First;
+	TVar ^First;
 	public:
 	TLVar() {
-	First=0;
+	}
+
+
+	TVar ^ GetFirst() {
+		return First;
 	}
 
 	bool NewVar(char c_c0l0r, int thr35h0ld, int valu3, int xx, int yy) {
-		TVar * n = new TVar();
+		TVar ^ n = gcnew TVar();
 		if (n)
 		{
 			cell^ x = gcnew cell(c_c0l0r, thr35h0ld, valu3, xx, yy);
@@ -94,13 +96,13 @@
 			n->next = First;
 			First = n;
 		}
-		return n;
+		return true;
 	}
 
-	TVar** FindVar (int pos, TVar* First=0) {
-		if(First==0)First=this->First;
-		if(pos==0)return &First;
-		return FindVar(pos-1,First->next);
+	TVar^ FindVar(int pos, TVar^ First) {
+		if (pos == 0)return First;
+		return FindVar(pos - 1, First->next);
+	}
 		/*static TVar **Found; Found = 0;
 	if (First) if (First->war->getname()==name) Found = &First;
 	else {
@@ -110,54 +112,54 @@
 		 }
 		}
 	return Found;*/
-	}
+	
 
 		void explosion (int size, int pos, char p_color) {
-		(*(*FindVar(pos))->n)->ChValue(0);
-		(*(*FindVar(pos))->n)->ChColor('n');
+		((FindVar(pos, First))->n)->ChValue(0);
+		((FindVar(pos, First))->n)->ChColor('n');
 		if (pos<size-1)
-			(*(*FindVar(pos+1))->n)->inc(p_color);
+			((FindVar(pos+1, First))->n)->inc(p_color);
 		if (pos>0)
-			(*(*FindVar(pos-1))->n)->inc(p_color);
+			((FindVar(pos-1, First))->n)->inc(p_color);
 		if (pos<(size^2-size))
-			(*(*FindVar(pos+size))->n)->inc(p_color);
+			((FindVar(pos+size, First))->n)->inc(p_color);
 		if (pos>=size)
-			(*(*FindVar(pos-size))->n)->inc(p_color);
+			((FindVar(pos-size, First))->n)->inc(p_color);
 	}
 
 		bool danger (int size, int pos) {
 		bool danger=false;
-		if ((*(*FindVar(pos))->n)->GetValue()==(*(*FindVar(pos))->n)->GetThr()) {
+		if (((FindVar(pos, First))->n)->GetValue()==((FindVar(pos, First))->n)->GetThr()) {
 			danger=true;
 			return danger;
 		}
 		if (pos<size-1)
-			if ((*(*FindVar(pos+1))->n)->GetValue()==(*(*FindVar(pos+1))->n)->GetThr()) {
+			if (((FindVar(pos+1, First))->n)->GetValue()==((FindVar(pos+1, First))->n)->GetThr()) {
 				danger=true;
 				return danger;
 			}	
 		if (pos>0)
-			if ((*(*FindVar(pos-1))->n)->GetValue()==(*(*FindVar(pos-1))->n)->GetThr()) {
+			if (((FindVar(pos-1, First))->n)->GetValue()==((FindVar(pos-1, First))->n)->GetThr()) {
 				danger=true;
 				return danger;
 			}
 		if (pos<(size^2-size))
-			if ((*(*FindVar(pos+size))->n)->GetValue()==(*(*FindVar(pos+size))->n)->GetThr()) {
+			if (((FindVar(pos+size, First))->n)->GetValue()==((FindVar(pos+size, First))->n)->GetThr()) {
 				danger=true;
 				return danger;
 			}
 		if (pos>=size)
-			if ((*(*FindVar(pos-size))->n)->GetValue()==(*(*FindVar(pos-size))->n)->GetThr())
+			if (((FindVar(pos-size, First))->n)->GetValue()==((FindVar(pos-size, First))->n)->GetThr())
 				danger=true;	
 		return danger;
 	}
 
 		void ai (int size, int level) {
-		#define plus (*(*FindVar(i))->n)->inc('r')
+		#define plus ((FindVar(i, First))->n)->inc('r')
 		srand(time(NULL));
 		for (int i=0; i<(size*size); i++) {
 			// dont make the cell explodable
-			if (!((*(*FindVar(i))->n)->GetValue()==(*(*FindVar(i))->n)->GetThr()-1))
+			if (!(((FindVar(i, First))->n)->GetValue()==((FindVar(i, First))->n)->GetThr()-1))
 				switch (level) {
 					case 0:
 					plus;
@@ -210,38 +212,19 @@
 			return who_won;
 		}
 		
-		void side (int i, TLVar* m, int x, int y) { 
-			static int d=0;
+		TLVar ^ draw () {
+			TLVar ^ m = gcnew TLVar();
 			int thr;
-			d++;
-			switch (d) {
-				case 1: x+=1; break;
-				case 2: y-=1; break;
-				case 3: x-=1; break;
-				case 4: y+=1; d=0;
-			}
-			// DefineMyThreshold
-			if ((i==0)||(i==(size-1))||(i==(size*(size-1)))||(i==(size^2-1)))
-				thr=3;
-			else
-				if ((i<(size-1))||(i>(size*(size-1)))||((i%size)==0)||((i%size)-(size-1)==0))
-					thr=5;
+			for (int i = 0; i < size; i++) {
+				if ((i == 0) || (i == (size - 1)) || (i == (size*(size - 1))) || (i == (size ^ 2 - 1)))
+					thr = 3;
 				else
-					thr=8;
-			m->NewVar('n',thr,'0',x,y);
-		}
-
-
-
-		TLVar draw () {
-			TLVar m;
-			int x=5;
-			int y=4;
-			for (int i=0; i<(size / 2); i++) {
-				x-=1;
-				y+=1;
-				for (int j=0; j<4; j++) {
-				side(i, &m, x, y);
+				if ((i<(size - 1)) || (i>(size*(size - 1))) || ((i%size) == 0) || ((i%size) - (size - 1) == 0))
+					thr = 5;
+				else
+					thr = 8;
+				for (int j = 0; j < size; j++) {
+					m->NewVar('n', thr, 0, i+2, j+2);
 				}
 			}
 			return m;

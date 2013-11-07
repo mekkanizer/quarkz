@@ -34,17 +34,13 @@ using namespace window_test;
 		if (!Visible) {
 			game* curr;
 			curr = new game(settings.size, settings.level);
-			TLVar array = curr->draw();
-			TVar *var;
-			var = (*array.FindVar(0));
+			window->panel1->Controls->Clear();
+			TLVar ^ array = curr->draw();
+			TVar ^var;
+			var = (array->FindVar(0, array->GetFirst()));
 			if (var) do
 			{
-				cell ^*qq = var->n;
-				cell ^tt = *(qq);
-				cell^ xx = gcnew cell('n', 8, 0, 4, 4);
-				window->Controls->Add(xx);
-
-				window->Controls->Add(tt); //???
+				window->panel1->Controls->Add(var->n);
 				var = var->next;
 			} while (var);
 		}
