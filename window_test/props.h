@@ -171,12 +171,13 @@ namespace window_test {
 			// 
 			// button1
 			// 
+			this->button1->BackColor = System::Drawing::SystemColors::Control;
 			this->button1->Location = System::Drawing::Point(132, 290);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(75, 23);
 			this->button1->TabIndex = 8;
 			this->button1->Text = L"Start";
-			this->button1->UseVisualStyleBackColor = true;
+			this->button1->UseVisualStyleBackColor = false;
 			this->button1->Click += gcnew System::EventHandler(this, &props::button1_Click);
 			// 
 			// panel1
@@ -233,7 +234,6 @@ namespace window_test {
 			this->Controls->Add(this->button1);
 			this->Name = L"props";
 			this->Text = L"props";
-//			this->FormClosed += gcnew System::Windows::Forms::FormClosedEventHandler(this, &props::props_FormClosed);
 			this->VisibleChanged += gcnew System::EventHandler(this, &props::props_VisibleChanged);
 			this->panel1->ResumeLayout(false);
 			this->panel1->PerformLayout();

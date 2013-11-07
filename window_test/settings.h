@@ -18,12 +18,6 @@
 	//public:
 	//	random(Form1^ pointer) :window(pointer), FormClosedEventArgs(System::Windows::Forms::CloseReason()){};
 	//};
-
-	
-		//таймер, либо в начале ф-ии клика что-то вроде
-		//if(timeGetTime()-startWaitingTime<1000)return;
-		//startWaitingTime - интегер, в котором записан момент времени, с которого началась пауза
-		//timeGetTime() - функция, возвращающая прошедшее кол-во мс с начала работы проги
 	
 
 	//void click (System::Object^  sender, System::EventArgs^  e) {
@@ -37,8 +31,8 @@
 	public:
 		cell (char c_c0l0r, int thr35h0ld, int valu3, int xx, int yy):c_color(c_c0l0r),thr(thr35h0ld),value(valu3) {
 			Size = System::Drawing::Size(50, 50);
-			Location = System::Drawing::Point(xx*50, yy*50);
-			//text=(std::to_string(value));
+			Location = System::Drawing::Point(xx * 50, yy * 50);
+			Text::set(System::Convert::ToString(value));
 			//Click += gcnew System::EventHandler(this, &Form1::sett_Click);
 		}
 		bool inc(char p_color) {
@@ -102,17 +96,7 @@
 	TVar^ FindVar(int pos, TVar^ First) {
 		if (pos == 0)return First;
 		return FindVar(pos - 1, First->next);
-	}
-		/*static TVar **Found; Found = 0;
-	if (First) if (First->war->getname()==name) Found = &First;
-	else {
-		 for (TVar *tmp = First; ((!Found)&&(tmp->next)); tmp = tmp->next) {
-		 if (tmp->next->war->getname()==name)
-			 Found = &tmp->next;
-		 }
-		}
-	return Found;*/
-	
+	}	
 
 		void explosion (int size, int pos, char p_color) {
 		((FindVar(pos, First))->n)->ChValue(0);
