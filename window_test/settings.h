@@ -2,7 +2,6 @@
 
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
-#include <string>
 
 	public class Settings
 	{
@@ -13,27 +12,22 @@
 	
 	extern Settings settings;
 
-	//ref class random:public System::Windows::Forms::FormClosedEventArgs {
-	//Form1^ window;
-	//public:
-	//	random(Form1^ pointer) :window(pointer), FormClosedEventArgs(System::Windows::Forms::CloseReason()){};
-	//};
-	
+	ref class TLVar{};
 
-	//void click (System::Object^  sender, System::EventArgs^  e) {
-	//	
-	//}
-
-	public ref class cell : public System::Windows::Forms::Button {
+	public ref struct cell : public System::Windows::Forms::Button {
 		char c_color; //n - neutral; r - red; b - blue;
 		int thr; //threshold (determined by cell position in grid: corner - 3; border - 5; else - 8)
 		int value;
 	public:
+	    void display () {
+			Text::set(System::Convert::ToString(value));
+		}
+	
 		cell (char c_c0l0r, int thr35h0ld, int valu3, int xx, int yy):c_color(c_c0l0r),thr(thr35h0ld),value(valu3) {
 			Size = System::Drawing::Size(50, 50);
 			Location = System::Drawing::Point(xx * 50, yy * 50);
-			Text::set(System::Convert::ToString(value));
-			//Click += gcnew System::EventHandler(this, &Form1::sett_Click);
+			display();
+			Click += gcnew System::EventHandler(this, &cell_Click);
 		}
 		bool inc(char p_color) {
 			bool explode=false;
@@ -43,25 +37,7 @@
 			c_color=p_color;
 			return explode;
 		}
-
-		void ChValue (int valu3) {
-			value=valu3;
-		}
-
-		int GetValue () {
-			return value;
-		}
-
-		int GetThr () {
-			return thr;
-		}
-
-		void ChColor (char c_c0l0r) {
-			c_color=c_c0l0r;
-		}
-
-
-
+		System::Void cell_Click(System::Object^  sender, System::EventArgs^  e);
 	};
 
 	ref struct TVar {
@@ -98,99 +74,137 @@
 		return FindVar(pos - 1, First->next);
 	}	
 
-		void explosion (int size, int pos, char p_color) {
-		((FindVar(pos, First))->n)->ChValue(0);
-		((FindVar(pos, First))->n)->ChColor('n');
-		if (pos<size-1)
-			((FindVar(pos+1, First))->n)->inc(p_color);
+	bool explosion(int size, int pos, char p_color) {
+		bool result = false;
+		((FindVar(pos, First))->n)->value = 0;
+		((FindVar(pos, First))->n)->c_color = 'n';
+		if (pos<size - 1)
+			if (((FindVar(pos + 1, First))->n)->inc(p_color)) {
+				result=true;
+				explosion(size, pos, 'r');
+			}			
 		if (pos>0)
-			((FindVar(pos-1, First))->n)->inc(p_color);
-		if (pos<(size^2-size))
-			((FindVar(pos+size, First))->n)->inc(p_color);
-		if (pos>=size)
-			((FindVar(pos-size, First))->n)->inc(p_color);
+			if (((FindVar(pos - 1, First))->n)->inc(p_color)) {
+				result=true;
+				explosion(size, pos, 'r');
+			}
+		if (pos<(size ^ 2 - size))
+			if (((FindVar(pos + size, First))->n)->inc(p_color)) {
+				result=true;
+				explosion(size, pos, 'r');
+			}
+		if (pos >= size)
+			if (((FindVar(pos - size, First))->n)->inc(p_color)) {
+				result=true;
+				explosion(size, pos, 'r');
+			}
+		return result;
 	}
 
-		bool danger (int size, int pos) {
-		bool danger=false;
-		if (((FindVar(pos, First))->n)->GetValue()==((FindVar(pos, First))->n)->GetThr()) {
-			danger=true;
+	bool danger(int size, int pos) {
+		bool danger = false;
+		if (((FindVar(pos, First))->n)->value == ((FindVar(pos, First))->n)->thr) {
+			danger = true;
 			return danger;
 		}
-		if (pos<size-1)
-			if (((FindVar(pos+1, First))->n)->GetValue()==((FindVar(pos+1, First))->n)->GetThr()) {
-				danger=true;
-				return danger;
-			}	
+		if (pos<size - 1)
+		if (((FindVar(pos + 1, First))->n)->value == ((FindVar(pos + 1, First))->n)->thr) {
+			danger = true;
+			return danger;
+		}
 		if (pos>0)
-			if (((FindVar(pos-1, First))->n)->GetValue()==((FindVar(pos-1, First))->n)->GetThr()) {
-				danger=true;
-				return danger;
-			}
-		if (pos<(size^2-size))
-			if (((FindVar(pos+size, First))->n)->GetValue()==((FindVar(pos+size, First))->n)->GetThr()) {
-				danger=true;
-				return danger;
-			}
-		if (pos>=size)
-			if (((FindVar(pos-size, First))->n)->GetValue()==((FindVar(pos-size, First))->n)->GetThr())
-				danger=true;	
+		if (((FindVar(pos - 1, First))->n)->value == ((FindVar(pos - 1, First))->n)->thr) {
+			danger = true;
+			return danger;
+		}
+		if (pos<(size ^ 2 - size))
+		if (((FindVar(pos + size, First))->n)->value == ((FindVar(pos + size, First))->n)->thr) {
+			danger = true;
+			return danger;
+		}
+		if (pos >= size)
+		if (((FindVar(pos - size, First))->n)->value == ((FindVar(pos - size, First))->n)->thr)
+			danger = true;
 		return danger;
 	}
 
-		void ai (int size, int level) {
+	bool ai(int size, int level) {
+		bool result = false;
 		#define plus ((FindVar(i, First))->n)->inc('r')
 		srand(time(NULL));
-		for (int i=0; i<(size*size); i++) {
+		for (int i = 0; i<(size*size); i++) {
 			// dont make the cell explodable
-			if (!(((FindVar(i, First))->n)->GetValue()==((FindVar(i, First))->n)->GetThr()-1))
+			if (!(((FindVar(i, First))->n)->value == ((FindVar(i, First))->n)->thr - 1))
 				switch (level) {
-					case 0:
-					plus;
+				case 0:
+					if (plus) {
+						result=true;
+						explosion(size, i, 'r');
+					}
 					break;
-					case 1:
+				case 1:
 					// 50-50 decision
-					if ((rand()%1)&&(!(danger(size, i))))
-						plus;
+					if ((rand() % 1) && (!(danger(size, i))))
+						if (plus) {
+							result=true;
+							explosion(size, i, 'r');
+						}
 					break;
-					case 2:
+				case 2:
 					// check if it can be *safely* exploded
 					if (!(danger(size, i)))
-						plus;					
-				}
+						if (plus) {
+							result=true;
+							explosion(size, i, 'r');
+						}
+			}
 		}
+		return result;
 	}
 
-	};
-
-
-
-	struct player {
-		char p_color;
-		int score;
-	public:
-		player(char p_c0l0r):p_color(p_c0l0r),score(0) {}
+		int GetScore(char p_color) {
+			int result=0;
+			TVar ^srch;
+			srch = FindVar(0, First);
+			if (srch) do
+			{
+				if (srch->n->c_color == p_color)
+					result += srch->n->value;
+				srch = srch->next;
+			} while (srch);
+			return result;
+		}
+		
 	};
 
 	struct game {
 		bool q; //false - blue
-		int w_score; //score enough to win
+		bool redraw;
+		int b_score; // blue player score
+		int r_score; // red player score
+		int w_score; // score enough to win
 		int size;  // select (4/6/8) square width
 		int level; // AI level
-		char fill; //b - blank; t-triangles; x - cross; l - lines
+		char fill; // b - blank; t-triangles; x - cross; l - lines
 		char who_won;
 		game(int s1z3, int l3v3l):size(s1z3),level(l3v3l){
 			w_score=size*10;
+			b_score=0;
+			r_score=0;
 			who_won='n';
 		}
 
-		char turn() {
-			player player1('b');
-			player player2('r');
-			
-			if ((player1.score>=w_score)&&(player1.score>player2.score))
+		char turn(TLVar ^ array) {
+			redraw = false;
+			if (q)
+				if (array->ai(size, level)) {
+					redraw = true;
+					r_score=array->GetScore('r');
+				}
+				else r_score++;
+			if ((b_score>=w_score)&&(b_score>r_score))
 				who_won='b';
-			if ((player2.p_color>=w_score)&&(player2.score>player1.score))
+			if ((r_score>=w_score)&&(r_score>b_score))
 				who_won='r';
 			q=!q;
 			return who_won;

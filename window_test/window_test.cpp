@@ -4,10 +4,7 @@
 #include "Form1.h"
 #include "props.h"
 
-
 Settings settings;
-
-
 
 using namespace window_test;
 
@@ -29,7 +26,6 @@ using namespace window_test;
 
 			 }
 
-			 
 	System::Void props<Form1>::props_VisibleChanged(System::Object^  sender, System::EventArgs^  e) {
 		if (!Visible) {
 			game* curr;
@@ -43,6 +39,35 @@ using namespace window_test;
 				window->panel1->Controls->Add(var->n);
 				var = var->next;
 			} while (var);
+			window->label1->Visible = true;
+			window->label4->Visible = true;
+
+			bool b=true;
+
+			do {
+				window->label1->Text=(System::Convert::ToString(curr->b_score));
+				window->label4->Text=(System::Convert::ToString(curr->r_score));
+				if (curr->redraw) {
+					curr->redraw=false;
+					var = (array->FindVar(0, array->GetFirst()));
+					if (var) do
+					{
+						var->n->display();
+						var = var->next;
+					} while (var);
+				}
+				if (curr->q) {
+					window->panel1->Enabled = false;
+					window->label2->Visible = false;
+					window->label3->Visible = true;
+					_sleep(1000);
+					window->panel1->Enabled = true;
+				}
+				else {
+					window->label2->Visible = true;
+					window->label3->Visible = false;
+				} 
+			} while (b==false); //(curr->turn(array) == 'n');
 		}
 	}
 
