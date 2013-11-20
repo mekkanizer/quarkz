@@ -13,6 +13,7 @@ namespace window_test {
 	/// <summary>
 	/// Сводка для props
 	/// </summary>
+	template <class Form1>
 	public ref class props : public System::Windows::Forms::Form
 	{
 	public:
@@ -49,6 +50,8 @@ namespace window_test {
 	private: System::Windows::Forms::RadioButton^  radioButton7;
 	private: System::Windows::Forms::Label^  label3;
 
+	public:
+		Form1 ^ window;
 	private:
 		/// <summary>
 		/// Требуется переменная конструктора.

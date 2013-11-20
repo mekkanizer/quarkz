@@ -38,8 +38,12 @@ namespace window_test {
 	public: System::Windows::Forms::Panel^  panel1;
  System::Windows::Forms::Label^  label1;
  System::Windows::Forms::Label^  label2;
- System::Windows::Forms::Label^  label3;
+
  System::Windows::Forms::Label^  label4;
+
+
+	public: System::Windows::Forms::Label^  label7;
+
 
 
 	protected: 
@@ -60,8 +64,8 @@ namespace window_test {
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->label2 = (gcnew System::Windows::Forms::Label());
-			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->label4 = (gcnew System::Windows::Forms::Label());
+			this->label7 = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
 			// sett
@@ -96,23 +100,12 @@ namespace window_test {
 			// 
 			this->label2->AutoSize = true;
 			this->label2->ForeColor = System::Drawing::Color::Blue;
-			this->label2->Location = System::Drawing::Point(157, 17);
+			this->label2->Location = System::Drawing::Point(156, 17);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(59, 13);
 			this->label2->TabIndex = 3;
 			this->label2->Text = L"Ход Синих";
 			this->label2->Visible = false;
-			// 
-			// label3
-			// 
-			this->label3->AutoSize = true;
-			this->label3->ForeColor = System::Drawing::Color::Red;
-			this->label3->Location = System::Drawing::Point(416, 17);
-			this->label3->Name = L"label3";
-			this->label3->Size = System::Drawing::Size(73, 13);
-			this->label3->TabIndex = 4;
-			this->label3->Text = L"Ход Красных";
-			this->label3->Visible = false;
 			// 
 			// label4
 			// 
@@ -124,13 +117,24 @@ namespace window_test {
 			this->label4->Text = L"label4";
 			this->label4->Visible = false;
 			// 
+			// label7
+			// 
+			this->label7->AutoSize = true;
+			this->label7->ForeColor = System::Drawing::Color::Red;
+			this->label7->Location = System::Drawing::Point(418, 17);
+			this->label7->Name = L"label7";
+			this->label7->Size = System::Drawing::Size(73, 13);
+			this->label7->TabIndex = 3;
+			this->label7->Text = L"Ход Красных";
+			this->label7->Visible = false;
+			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(653, 626);
 			this->Controls->Add(this->label4);
-			this->Controls->Add(this->label3);
+			this->Controls->Add(this->label7);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->panel1);

@@ -1,4 +1,6 @@
-﻿#include "stdafx.h"
+﻿// window_test.cpp: ãëàâíûé ôàéë ïðîåêòà.
+
+#include "stdafx.h"
 #include "Form1.h"
 #include "props.h"
 #include "settings.h"
@@ -15,7 +17,7 @@ public:
 };
 
 
-System::Void props::button1_Click(System::Object^  sender, System::EventArgs^  e) {
+System::Void props<Form1>::button1_Click(System::Object^  sender, System::EventArgs^  e) {
 	int size = 8, level = 2;
 	if (radioButton1->Checked)
 		size = 4;
@@ -33,7 +35,7 @@ System::Void props::button1_Click(System::Object^  sender, System::EventArgs^  e
 
 }
 
-System::Void props::props_VisibleChanged(System::Object^  sender, System::EventArgs^  e) {
+System::Void props<Form1>::props_VisibleChanged(System::Object^  sender, System::EventArgs^  e) {
 	if (!Visible) {
 		PTR::array = gcnew TLVar();
 		PTR::window->panel1->Controls->Clear();
@@ -48,12 +50,12 @@ System::Void props::props_VisibleChanged(System::Object^  sender, System::EventA
 		PTR::window->label4->Visible = true;
 		PTR::window->label1->Text = (System::Convert::ToString(PTR::array->b_score));
 		PTR::window->label4->Text = (System::Convert::ToString(PTR::array->r_score));
-		PTR::window->label2->Visible = true;
 	}
 }
 
 System::Void Form1::sett_Click(System::Object^  sender, System::EventArgs^  e) {
-	props ^ n_g = gcnew props();
+	props<Form1> ^ n_g = gcnew props<Form1>();
+	n_g->window = this;
 	n_g->Visible = true;
 }
 
@@ -62,30 +64,32 @@ System::Void Form1::sett_Click(System::Object^  sender, System::EventArgs^  e) {
 System::Void cell::cell_Click(System::Object^  sender, System::EventArgs^  e) {
 	// human turn
 	TVar ^var;
-	int test = (int)(((Control^)sender)->Tag);
 	var = (PTR::array->FindVar((int)(((Control^)sender)->Tag), PTR::array->GetFirst()));
-	if (var->n->inc('b')) 
+	if (var->n->inc('b')) {
 		PTR::array->explosion(settings.size, (int)(((Control^)sender)->Tag), 'b');
+		PTR::array->b_score = PTR::array->GetScore('b');
+	}
+	else PTR::array->b_score++;
+
 	
 	// refresh the score
-	PTR::array->b_score = PTR::array->GetScore('b');
 	PTR::window->label1->Text = (System::Convert::ToString(PTR::array->b_score));
 	// prepare AI turn
-	PTR::window->label2->Visible = false;
-	PTR::window->label7->Visible = true;
-	//bool testt = PTR::window->label3->Visible; // И ДАЖЕ ТЕСТТ ПРИСВАИВАЕТСЯ ТРУ!!!!!!!111111
-	//PTR::window->label3->Visible = true;
 	PTR::window->panel1->Enabled = false;
+	PTR::window->label2->Visible = false;
+	PTR::window->label3->Visible = true;
 	_sleep(1000);
 	PTR::window->panel1->Enabled = true;
 	// AI turn	 
-	PTR::array->ai(settings.size, settings.level);
+	int result;
+	if ((result = (PTR::array->ai(settings.size, settings.level))) != -1) 
+		PTR::array->r_score = PTR::array->GetScore('r');
+	else PTR::array->r_score++;
 	// refresh the score
-	PTR::array->r_score = PTR::array->GetScore('r');
 	PTR::window->label4->Text = (System::Convert::ToString(PTR::array->r_score));
 	// prepare human turn
 	PTR::window->label2->Visible = true;
-	PTR::window->label7->Visible = false;
+	PTR::window->label3->Visible = false;
 	// redraw
 
 		var = (PTR::array->FindVar(0, PTR::array->GetFirst()));

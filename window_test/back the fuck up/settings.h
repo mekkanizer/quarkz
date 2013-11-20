@@ -19,23 +19,14 @@ public ref struct cell : public System::Windows::Forms::Button {
 public:
 	void display() {
 		Text::set(System::Convert::ToString(value));
-		switch (c_color)
-		{
-		case 'n': ForeColor::set(System::Drawing::Color::Black);
-			break;
-		case 'r': ForeColor::set(System::Drawing::Color::Red);
-			break;
-		case 'b': ForeColor::set(System::Drawing::Color::Blue);
-			break;
-		}
 	}
 
-	cell(char c_c0l0r, int thr35h0ld, int valu3, int xx, int yy, int i) :c_color(c_c0l0r), thr(thr35h0ld), value(valu3) {
+	cell(char c_c0l0r, int thr35h0ld, int valu3, int xx, int yy) :c_color(c_c0l0r), thr(thr35h0ld), value(valu3) {
 		Size = System::Drawing::Size(50, 50);
 		Location = System::Drawing::Point(xx * 50, yy * 50);
 		display();
 		Click += gcnew System::EventHandler(this, &cell::cell_Click);
-		Tag::set(settings.size*settings.size-i-1);
+		Tag::set(((xx - 2) / settings.size + yy - 2));
 	}
 	bool inc(char p_color) {
 		bool explode = false;
@@ -63,11 +54,11 @@ public:
 	char fill; // b - blank; t-triangles; x - cross; l - lines
 	char who_won;
 
-	bool NewVar(char c_c0l0r, int thr35h0ld, int valu3, int xx, int yy, int i) {
+	bool NewVar(char c_c0l0r, int thr35h0ld, int valu3, int xx, int yy) {
 		TVar ^ n = gcnew TVar();
 		if (n)
 		{
-			cell^ x = gcnew cell(c_c0l0r, thr35h0ld, valu3, xx, yy, i);
+			cell^ x = gcnew cell(c_c0l0r, thr35h0ld, valu3, xx, yy);
 			n->n = x;
 			n->next = First;
 			First = n;
@@ -90,8 +81,7 @@ public:
 			else
 				thr = 8;
 			for (int j = 0; j < settings.size; j++) {
-				int test = j + (settings.size*i);
-				NewVar('n', thr, 0, i + 2, j + 2, j+(settings.size*i));
+				NewVar('n', thr, 0, i + 2, j + 2);
 			}
 		}
 	}
