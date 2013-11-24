@@ -1,4 +1,5 @@
 #pragma once
+#include"Form1.h"
 
 namespace window_test {
 
@@ -15,9 +16,11 @@ namespace window_test {
 	/// </summary>
 	public ref class props : public System::Windows::Forms::Form
 	{
+	private: Form1^ f;
 	public:
-		props(void)
+		props(Form1^ f)
 		{
+			this->f = f;
 			InitializeComponent();
 			//
 			//TODO: добавьте код конструктора

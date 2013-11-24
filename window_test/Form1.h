@@ -1,4 +1,5 @@
 #pragma once
+#include"settings.h"
 
 namespace window_test {
 
@@ -8,15 +9,23 @@ namespace window_test {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
-	
+
+
+
 	/// <summary>
 	/// Сводка для Form1
 	/// </summary>
 	public ref class Form1 : public System::Windows::Forms::Form
 	{
 	public:
+		TLVar^ array;
+		Settings^ settings;
+
+		System::Void Form1::cell_Click(System::Object^  sender, System::EventArgs^  e);
+
 		Form1(void)
 		{
+			settings = gcnew Settings;
 			InitializeComponent();
 			//
 			//TODO: добавьте код конструктора
@@ -44,10 +53,30 @@ namespace window_test {
 
 	public: System::Windows::Forms::Label^  label7;
 
-
+			void setVisibleLabel7()
+			{
+				//this->SuspendLayout();
+				//this->Controls->Remove(this->label7);
+				//delete this->label7;
+				//this->label7 = (gcnew System::Windows::Forms::Label());
+				this->label7->Visible = true;
+				this->label7->AutoSize = true;
+				this->label7->ForeColor = System::Drawing::Color::Red;
+				this->label7->Location = System::Drawing::Point(418, 17);
+				this->label7->Name = L"label7";
+				this->label7->Size = System::Drawing::Size(73, 13);
+				this->label7->TabIndex = 3;
+				this->label7->Text = L"Ход Красных";
+				//this->Controls->Add(this->label7);
+				//this->ResumeLayout(false);
+				//this->PerformLayout();
+			}
 
 	protected: 
 	private:
+		
+
+
 		/// <summary>
 		/// Требуется переменная конструктора.
 		/// </summary>
@@ -126,7 +155,7 @@ namespace window_test {
 			this->label7->Size = System::Drawing::Size(73, 13);
 			this->label7->TabIndex = 3;
 			this->label7->Text = L"Ход Красных";
-			this->label7->Visible = false;
+			this->label7->Visible = true;
 			// 
 			// Form1
 			// 

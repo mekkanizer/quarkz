@@ -3,14 +3,13 @@
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 
-
-public class Settings
+public ref class Settings
 {
 public:
 	int size, level;
 };
 
-extern Settings settings;
+//extern Settings settings;
 
 public ref struct cell : public System::Windows::Forms::Button {
 	char c_color; //n - neutral; r - red; b - blue;
@@ -30,12 +29,12 @@ public:
 		}
 	}
 
-	cell(char c_c0l0r, int thr35h0ld, int valu3, int xx, int yy, int i) :c_color(c_c0l0r), thr(thr35h0ld), value(valu3) {
+	cell(char c_c0l0r, int thr35h0ld, int valu3, int xx, int yy, int i, System::EventHandler^ eh,Settings^ settings) :c_color(c_c0l0r), thr(thr35h0ld), value(valu3) {
 		Size = System::Drawing::Size(50, 50);
 		Location = System::Drawing::Point(xx * 50, yy * 50);
 		display();
-		Click += gcnew System::EventHandler(this, &cell::cell_Click);
-		Tag::set(settings.size*settings.size-i-1);
+		Click += eh;// gcnew System::EventHandler(this, &cell::cell_Click);
+		Tag::set(settings->size*settings->size-i-1);
 	}
 	bool inc(char p_color) {
 		bool explode = false;
@@ -45,15 +44,15 @@ public:
 		c_color = p_color;
 		return explode;
 	}
-	System::Void cell_Click(System::Object^  sender, System::EventArgs^  e);
+	//System::Void cell_Click(System::Object^  sender, System::EventArgs^  e);
 };
 
-ref struct TVar {
+public ref struct TVar {
 	cell^ n;
 	TVar^ next;
 };
 
-ref class TLVar {
+public ref class TLVar {
 private:
 	TVar ^First;
 public:
@@ -63,11 +62,11 @@ public:
 	char fill; // b - blank; t-triangles; x - cross; l - lines
 	char who_won;
 
-	bool NewVar(char c_c0l0r, int thr35h0ld, int valu3, int xx, int yy, int i) {
+	bool NewVar(char c_c0l0r, int thr35h0ld, int valu3, int xx, int yy, int i,System::EventHandler^ eh,Settings^ settings) {
 		TVar ^ n = gcnew TVar();
 		if (n)
 		{
-			cell^ x = gcnew cell(c_c0l0r, thr35h0ld, valu3, xx, yy, i);
+			cell^ x = gcnew cell(c_c0l0r, thr35h0ld, valu3, xx, yy, i,eh,settings);
 			n->n = x;
 			n->next = First;
 			First = n;
@@ -75,23 +74,26 @@ public:
 		return true;
 	}
 
-	TLVar(){
-		w_score = settings.size * 10;
+
+public:
+
+	TLVar(System::EventHandler^ eh,Settings^ settings){
+		w_score = settings->size * 10;
 		b_score = 0;
 		r_score = 0;
 		who_won = 'n';
 		int thr;
-		for (int i = 0; i < settings.size; i++) {
-			if ((i == 0) || (i == (settings.size - 1)) || (i == (settings.size*(settings.size - 1))) || (i == (settings.size ^ 2 - 1)))
+		for (int i = 0; i < settings->size; i++) {
+			if ((i == 0) || (i == (settings->size - 1)) || (i == (settings->size*(settings->size - 1))) || (i == (settings->size ^ 2 - 1)))
 				thr = 3;
 			else
-			if ((i<(settings.size - 1)) || (i>(settings.size*(settings.size - 1))) || ((i%settings.size) == 0) || ((i%settings.size) - (settings.size - 1) == 0))
+			if ((i<(settings->size - 1)) || (i>(settings->size*(settings->size - 1))) || ((i%settings->size) == 0) || ((i%settings->size) - (settings->size - 1) == 0))
 				thr = 5;
 			else
 				thr = 8;
-			for (int j = 0; j < settings.size; j++) {
-				int test = j + (settings.size*i);
-				NewVar('n', thr, 0, i + 2, j + 2, j+(settings.size*i));
+			for (int j = 0; j < settings->size; j++) {
+				int test = j + (settings->size*i);
+				NewVar('n', thr, 0, i + 2, j + 2, j+(settings->size*i),eh,settings);
 			}
 		}
 	}
