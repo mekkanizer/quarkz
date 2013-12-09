@@ -50,7 +50,7 @@ namespace window_test {
 	private: System::Windows::Forms::Panel^  panel1;
 	private: System::Windows::Forms::Panel^  panel2;
 	private: System::Windows::Forms::RadioButton^  radioButton7;
-	private: System::Windows::Forms::Label^  label3;
+	//private: System::Windows::Forms::Label^  label3;
 
 	private:
 		/// <summary>
@@ -77,7 +77,6 @@ namespace window_test {
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
 			this->radioButton7 = (gcnew System::Windows::Forms::RadioButton());
-			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->panel1->SuspendLayout();
 			this->panel2->SuspendLayout();
 			this->SuspendLayout();
@@ -89,7 +88,7 @@ namespace window_test {
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(27, 13);
 			this->label1->TabIndex = 0;
-			this->label1->Text = L"Size";
+			this->label1->Text = L"Размер";
 			// 
 			// radioButton1
 			// 
@@ -99,7 +98,7 @@ namespace window_test {
 			this->radioButton1->Size = System::Drawing::Size(32, 17);
 			this->radioButton1->TabIndex = 1;
 			this->radioButton1->TabStop = true;
-			this->radioButton1->Text = L"S";
+			this->radioButton1->Text = L"Маленький (4х4)";
 			this->radioButton1->UseVisualStyleBackColor = true;
 			// 
 			// radioButton2
@@ -111,7 +110,7 @@ namespace window_test {
 			this->radioButton2->Size = System::Drawing::Size(34, 17);
 			this->radioButton2->TabIndex = 2;
 			this->radioButton2->TabStop = true;
-			this->radioButton2->Text = L"M";
+			this->radioButton2->Text = L"Средний (6х6)";
 			this->radioButton2->UseVisualStyleBackColor = true;
 			// 
 			// radioButton3
@@ -122,17 +121,17 @@ namespace window_test {
 			this->radioButton3->Size = System::Drawing::Size(31, 17);
 			this->radioButton3->TabIndex = 3;
 			this->radioButton3->TabStop = true;
-			this->radioButton3->Text = L"L";
+			this->radioButton3->Text = L"Большой (8х8)";
 			this->radioButton3->UseVisualStyleBackColor = true;
 			// 
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(5, 0);
+			this->label2->Location = System::Drawing::Point(0, 0);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(46, 13);
 			this->label2->TabIndex = 4;
-			this->label2->Text = L"AI Level";
+			this->label2->Text = L"Игрок х Компьютер";
 			// 
 			// radioButton4
 			// 
@@ -142,7 +141,7 @@ namespace window_test {
 			this->radioButton4->Size = System::Drawing::Size(48, 17);
 			this->radioButton4->TabIndex = 5;
 			this->radioButton4->TabStop = true;
-			this->radioButton4->Text = L"Easy";
+			this->radioButton4->Text = L"Легко";
 			this->radioButton4->UseVisualStyleBackColor = true;
 			// 
 			// radioButton5
@@ -154,7 +153,7 @@ namespace window_test {
 			this->radioButton5->Size = System::Drawing::Size(62, 17);
 			this->radioButton5->TabIndex = 6;
 			this->radioButton5->TabStop = true;
-			this->radioButton5->Text = L"Medium";
+			this->radioButton5->Text = L"Средне";
 			this->radioButton5->UseVisualStyleBackColor = true;
 			// 
 			// radioButton6
@@ -165,7 +164,7 @@ namespace window_test {
 			this->radioButton6->Size = System::Drawing::Size(48, 17);
 			this->radioButton6->TabIndex = 7;
 			this->radioButton6->TabStop = true;
-			this->radioButton6->Text = L"Hard";
+			this->radioButton6->Text = L"Сложно";
 			this->radioButton6->UseVisualStyleBackColor = true;
 			// 
 			// button1
@@ -175,7 +174,7 @@ namespace window_test {
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(75, 23);
 			this->button1->TabIndex = 8;
-			this->button1->Text = L"Start";
+			this->button1->Text = L"Начать";
 			this->button1->UseVisualStyleBackColor = false;
 			this->button1->Click += gcnew System::EventHandler(this, &props::button1_Click);
 			// 
@@ -193,7 +192,6 @@ namespace window_test {
 			// panel2
 			// 
 			this->panel2->Controls->Add(this->radioButton7);
-			this->panel2->Controls->Add(this->label3);
 			this->panel2->Controls->Add(this->label2);
 			this->panel2->Controls->Add(this->radioButton4);
 			this->panel2->Controls->Add(this->radioButton5);
@@ -206,22 +204,13 @@ namespace window_test {
 			// radioButton7
 			// 
 			this->radioButton7->AutoSize = true;
-			this->radioButton7->Location = System::Drawing::Point(123, 54);
+			this->radioButton7->Location = System::Drawing::Point(103, 54);
 			this->radioButton7->Name = L"radioButton7";
 			this->radioButton7->Size = System::Drawing::Size(59, 17);
 			this->radioButton7->TabIndex = 9;
 			this->radioButton7->TabStop = true;
-			this->radioButton7->Text = L"Human";
+			this->radioButton7->Text = L"Игрок х Игрок";
 			this->radioButton7->UseVisualStyleBackColor = true;
-			// 
-			// label3
-			// 
-			this->label3->AutoSize = true;
-			this->label3->Location = System::Drawing::Point(120, 0);
-			this->label3->Name = L"label3";
-			this->label3->Size = System::Drawing::Size(27, 13);
-			this->label3->TabIndex = 8;
-			this->label3->Text = L"PvP";
 			// 
 			// props
 			// 
@@ -232,7 +221,7 @@ namespace window_test {
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->button1);
 			this->Name = L"props";
-			this->Text = L"props";
+			this->Text = L"Настройки";
 			this->VisibleChanged += gcnew System::EventHandler(this, &props::props_VisibleChanged);
 			this->panel1->ResumeLayout(false);
 			this->panel1->PerformLayout();

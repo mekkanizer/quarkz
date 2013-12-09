@@ -3,16 +3,7 @@
 #include "props.h"
 #include "settings.h"
 
-
-
 using namespace window_test;
-
-/* public ref class PTR : public System::Windows::Forms::Form
-{
-public:
-	static Form1 ^ window;
-	static TLVar ^ array;
-};*/
 
 
 System::Void props::button1_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -35,6 +26,7 @@ System::Void props::button1_Click(System::Object^  sender, System::EventArgs^  e
 
 System::Void props::props_VisibleChanged(System::Object^  sender, System::EventArgs^  e) {
 	if (!Visible) {
+		this->f->panel1->Enabled = true;
 		TLVar^ tlvar = gcnew TLVar(gcnew System::EventHandler(this->f, &Form1::cell_Click),f->settings);
 		this->f->array = tlvar;
 		this->f->panel1->Controls->Clear();
@@ -63,73 +55,91 @@ System::Void Form1::sett_Click(System::Object^  sender, System::EventArgs^  e) {
 System::Void Form1::cell_Click(System::Object^  sender, System::EventArgs^  e) {
 	// human turn
 	TVar ^var;
-	int test = (int)(((Control^)sender)->Tag);
+	//array->CheckValues(settings);
 	var = (array->FindVar((int)(((Control^)sender)->Tag), array->GetFirst()));
-	if (var->n->inc('b')) 
-		array->explosion(settings->size, (int)(((Control^)sender)->Tag), 'b');
+	if (var->n->inc(array->player)) 
+		array->explosion(settings->size, (int)(((Control^)sender)->Tag), array->player);
 	
 	// refresh the score
-	array->b_score = array->GetScore('b');
+	array->b_score = array->GetScore(array->player);
 	this->label1->Text = (System::Convert::ToString(array->b_score));
-	// prepare AI turn
-//	this->label2->Hide();
-	label7->ForeColor = System::Drawing::Color::Red;
-	//PTR::window->label7->Hide();
-	//PTR::window->label7->Show();
-//	this->label7->Hide();
-//	this->label7->Show();
-	//this->label7->Show();
-	//this->label7->BringToFront();
-	this->label7->Location = System::Drawing::Point(440, 37);
-	label7->BackColor = System::Drawing::Color::Black;
-	this->label7->BringToFront();
-	//setVisibleLabel7();
 
-	//bool testt = PTR::window->label3->Visible;
-	//PTR::window->label3->Visible = true;
-	this->panel1->Enabled = false;
+	// prepare next turn
+	if (settings->level==-1) {
+		switch (array->player) {
+			case 'b': array->player = 'r'; 
+					this->label2->Visible = false;
+					this->label7->Visible = true;
+				break;
+			case 'r': array->player = 'b'; 
+					this->label2->Visible = true;
+					this->label7->Visible = false;
+				break;
+		}
+		// refresh the score
+		this->array->r_score = array->GetScore('r');
+		this->label4->Text = (System::Convert::ToString(array->r_score));
+		this->gameover();
+	}
+	else {
+		this->label2->Visible = false;
+		this->label7->Visible = true;
+		this->panel1->Enabled = false;
+		this->timer1->Start();
+	}	
+	// the rest of turn code is located in timer1_Tick
+}
 
-
-
-	_sleep(10000);
+System::Void Form1::timer1_Tick(System::Object^  sender, System::EventArgs^  e) {
 	this->panel1->Enabled = true;
 	// AI turn	 
 	this->array->ai(settings->size, settings->level);
 	// refresh the score
 	this->array->r_score = array->GetScore('r');
 	this->label4->Text = (System::Convert::ToString(array->r_score));
+
+	//check array
+	this->array->CheckValues(settings);
+
 	// prepare human turn
 	this->label2->Visible = true;
-	this->label7->Location = System::Drawing::Point(417, 17);
-	label7->ForeColor = System::Drawing::Color::Green;
-	//label7->ForeColor = Form1::BackColor;
-//	this->label7->Hide();
-	//	PTR::window->label7->Hide();
-	// redraw
+	this->label7->Visible = false;
 
-		var = (array->FindVar(0, array->GetFirst()));
-		if (var) do
-		{
-			var->n->display();
-			var = var->next;
-		} while (var);
+	this->gameover();
+	this->timer1->Stop();
+}
+
+void Form1::gameover() {
+	// redraw
+	TVar ^var;
+	var = (array->FindVar(0, array->GetFirst()));
+	if (var) do
+	{
+		var->n->display();
+		var = var->next;
+	} while (var);
 
 	// check if the game is over
 	if ((array->b_score >= array->w_score) && (array->b_score>array->r_score))
 		array->who_won = 'b';
 	if ((array->r_score >= array->w_score) && (array->r_score>array->b_score))
 		array->who_won = 'r';
+	if (array->who_won != 'n') {
+		switch (array->who_won) {
+		case 'b': this->label2->Text = "Синие победили";
+			break;
+		case 'r': this->label7->Text = "Красные победили";
+			break;
+		}
+		this->panel1->Enabled = false;
+	}
 }
 
 [STAThreadAttribute]
 int main(array<System::String ^> ^args)
 {
-	// Âêëþ÷åíèå âèçóàëüíûõ ýôôåêòîâ Windows XP äî ñîçäàíèÿ êàêèõ-ëèáî ýëåìåíòîâ óïðàâëåíèÿ
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
-
-	// Ñîçäàíèå ãëàâíîãî îêíà è åãî çàïóñê
-//	PTR::window = gcnew Form1();
 	Application::Run(gcnew Form1());
 	return 0;
 }

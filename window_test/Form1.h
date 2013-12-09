@@ -9,16 +9,14 @@ namespace window_test {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
-
-
-
-	/// <summary>
-	/// Сводка для Form1
-	/// </summary>
+	
 	public ref class Form1 : public System::Windows::Forms::Form
 	{
 	public:
 		TLVar^ array;
+	private: System::Windows::Forms::Timer^  timer1;
+	public:
+
 		Settings^ settings;
 
 		System::Void Form1::cell_Click(System::Object^  sender, System::EventArgs^  e);
@@ -27,15 +25,9 @@ namespace window_test {
 		{
 			settings = gcnew Settings;
 			InitializeComponent();
-			//
-			//TODO: добавьте код конструктора
-			//
 		}
 
 	protected:
-		/// <summary>
-		/// Освободить все используемые ресурсы.
-		/// </summary>
 		~Form1()
 		{
 			if (components)
@@ -45,56 +37,24 @@ namespace window_test {
 		}
 	private: System::Windows::Forms::Button^  sett;
 	public: System::Windows::Forms::Panel^  panel1;
- System::Windows::Forms::Label^  label1;
- System::Windows::Forms::Label^  label2;
+			System::Windows::Forms::Label^  label1;
+			System::Windows::Forms::Label^  label2;
+			System::Windows::Forms::Label^  label4;
+			System::Windows::Forms::Label^  label7;
 
- System::Windows::Forms::Label^  label4;
-
-
-	public: System::Windows::Forms::Label^  label7;
-
-			void setVisibleLabel7()
-			{
-				//this->SuspendLayout();
-				//this->Controls->Remove(this->label7);
-				//delete this->label7;
-				//this->label7 = (gcnew System::Windows::Forms::Label());
-				this->label7->Visible = true;
-				this->label7->AutoSize = true;
-				this->label7->ForeColor = System::Drawing::Color::Red;
-				this->label7->Location = System::Drawing::Point(418, 17);
-				this->label7->Name = L"label7";
-				this->label7->Size = System::Drawing::Size(73, 13);
-				this->label7->TabIndex = 3;
-				this->label7->Text = L"Ход Красных";
-				//this->Controls->Add(this->label7);
-				//this->ResumeLayout(false);
-				//this->PerformLayout();
-			}
-
-	protected: 
-	private:
-		
-
-
-		/// <summary>
-		/// Требуется переменная конструктора.
-		/// </summary>
-		System::ComponentModel::Container ^components;
+	private: System::ComponentModel::IContainer^  components;
 
 #pragma region Windows Form Designer generated code
-		/// <summary>
-		/// Обязательный метод для поддержки конструктора - не изменяйте
-		/// содержимое данного метода при помощи редактора кода.
-		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			this->sett = (gcnew System::Windows::Forms::Button());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->label7 = (gcnew System::Windows::Forms::Label());
+			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->SuspendLayout();
 			// 
 			// sett
@@ -104,7 +64,7 @@ namespace window_test {
 			this->sett->Name = L"sett";
 			this->sett->Size = System::Drawing::Size(75, 23);
 			this->sett->TabIndex = 0;
-			this->sett->Text = L"New Game";
+			this->sett->Text = L"Новая Игра";
 			this->sett->UseVisualStyleBackColor = false;
 			this->sett->Click += gcnew System::EventHandler(this, &Form1::sett_Click);
 			// 
@@ -129,6 +89,7 @@ namespace window_test {
 			// 
 			this->label2->AutoSize = true;
 			this->label2->ForeColor = System::Drawing::Color::Blue;
+			this->label2->BackColor = System::Drawing::Color::LightBlue;
 			this->label2->Location = System::Drawing::Point(156, 17);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(59, 13);
@@ -150,18 +111,25 @@ namespace window_test {
 			// 
 			this->label7->AutoSize = true;
 			this->label7->ForeColor = System::Drawing::Color::Red;
+			this->label7->BackColor = System::Drawing::Color::LightPink;
 			this->label7->Location = System::Drawing::Point(418, 17);
 			this->label7->Name = L"label7";
 			this->label7->Size = System::Drawing::Size(73, 13);
 			this->label7->TabIndex = 3;
 			this->label7->Text = L"Ход Красных";
-			this->label7->Visible = true;
+			this->label7->Visible = false;
+			// 
+			// timer1
+			// 
+			this->timer1->Interval = 2000;
+			this->timer1->Tick += gcnew System::EventHandler(this, &Form1::timer1_Tick);
 			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(653, 626);
+			this->BackColor = System::Drawing::Color::Gray;
 			this->Controls->Add(this->label4);
 			this->Controls->Add(this->label7);
 			this->Controls->Add(this->label2);
@@ -169,7 +137,7 @@ namespace window_test {
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->sett);
 			this->Name = L"Form1";
-			this->Text = L"Form1";
+			this->Text = L"Монополия";
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -178,7 +146,9 @@ namespace window_test {
 
 		System::Void sett_Click(System::Object^  sender, System::EventArgs^  e) ;
 
+		System::Void timer1_Tick(System::Object^  sender, System::EventArgs^  e) ;
 
-	};
+		void gameover();
+};
 }
 

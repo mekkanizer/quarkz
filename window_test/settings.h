@@ -9,8 +9,6 @@ public:
 	int size, level;
 };
 
-//extern Settings settings;
-
 public ref struct cell : public System::Windows::Forms::Button {
 	char c_color; //n - neutral; r - red; b - blue;
 	int thr; //threshold (determined by cell position in grid: corner - 3; border - 5; else - 8)
@@ -21,10 +19,13 @@ public:
 		switch (c_color)
 		{
 		case 'n': ForeColor::set(System::Drawing::Color::Black);
+				  BackColor::set(System::Drawing::Color::LightGray);
 			break;
 		case 'r': ForeColor::set(System::Drawing::Color::Red);
+				  BackColor::set(System::Drawing::Color::LightPink);
 			break;
 		case 'b': ForeColor::set(System::Drawing::Color::Blue);
+				  BackColor::set(System::Drawing::Color::LightBlue);
 			break;
 		}
 	}
@@ -33,18 +34,14 @@ public:
 		Size = System::Drawing::Size(50, 50);
 		Location = System::Drawing::Point(xx * 50, yy * 50);
 		display();
-		Click += eh;// gcnew System::EventHandler(this, &cell::cell_Click);
+		Click += eh;
 		Tag::set(settings->size*settings->size-i-1);
 	}
 	bool inc(char p_color) {
-		bool explode = false;
 		value++;
-		if (value>thr)
-			explode = true;
 		c_color = p_color;
-		return explode;
+		return (value>thr);
 	}
-	//System::Void cell_Click(System::Object^  sender, System::EventArgs^  e);
 };
 
 public ref struct TVar {
@@ -61,6 +58,7 @@ public:
 	int w_score; // score enough to win
 	char fill; // b - blank; t-triangles; x - cross; l - lines
 	char who_won;
+	char player;
 
 	bool NewVar(char c_c0l0r, int thr35h0ld, int valu3, int xx, int yy, int i,System::EventHandler^ eh,Settings^ settings) {
 		TVar ^ n = gcnew TVar();
@@ -81,19 +79,21 @@ public:
 		w_score = settings->size * 10;
 		b_score = 0;
 		r_score = 0;
+		int k = 0;
 		who_won = 'n';
+		player = 'b';
 		int thr;
-		for (int i = 0; i < settings->size; i++) {
-			if ((i == 0) || (i == (settings->size - 1)) || (i == (settings->size*(settings->size - 1))) || (i == (settings->size ^ 2 - 1)))
-				thr = 3;
-			else
-			if ((i<(settings->size - 1)) || (i>(settings->size*(settings->size - 1))) || ((i%settings->size) == 0) || ((i%settings->size) - (settings->size - 1) == 0))
-				thr = 5;
-			else
-				thr = 8;
-			for (int j = 0; j < settings->size; j++) {
-				int test = j + (settings->size*i);
-				NewVar('n', thr, 0, i + 2, j + 2, j+(settings->size*i),eh,settings);
+		int size = settings->size;
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++, k++) {
+				if ((k == 0) || (k == (size - 1)) || (k == (size*(size - 1))) || (k == (size * size - 1)))
+					thr = 3;
+				else
+				if ((k<(size - 1)) || (k>(size*(size - 1))) || ((k % size) == 0) || ((k % size) - (size - 1) == 0))
+					thr = 5;
+				else
+					thr = 8;
+				NewVar('n', thr, 0, i + 2, j + 2, j+(size*i),eh,settings);
 			}
 		}
 	}
@@ -110,27 +110,24 @@ public:
 
 	bool explosion(int size, int pos, char p_color) {
 		bool result = false;
-		((FindVar(pos, First))->n)->value = 0;
+		if (((FindVar(pos, First))->n)->value >= ((FindVar(pos, First))->n)->thr)
+			((FindVar(pos, First))->n)->value = 0;
 		((FindVar(pos, First))->n)->c_color = 'n';
-		if (pos<size - 1)
-		if (((FindVar(pos + 1, First))->n)->inc(p_color)) {
-			result = true;
-			explosion(size, pos, 'r');
-		}
-		if (pos>0)
+		if (pos % size != 0)
 		if (((FindVar(pos - 1, First))->n)->inc(p_color)) {
-			result = true;
-			explosion(size, pos, 'r');
+			result = explosion(size, pos-1, p_color);
 		}
-		if (pos<(size ^ 2 - size))
+		if ((pos + 1) % size != 0)
+		if (((FindVar(pos + 1, First))->n)->inc(p_color)) {
+			result = explosion(size, pos+1, p_color);
+		}
+		if (pos < (size * (size - 1)))
 		if (((FindVar(pos + size, First))->n)->inc(p_color)) {
-			result = true;
-			explosion(size, pos, 'r');
+			result = explosion(size, pos+size, p_color);
 		}
 		if (pos >= size)
 		if (((FindVar(pos - size, First))->n)->inc(p_color)) {
-			result = true;
-			explosion(size, pos, 'r');
+			result = explosion(size, pos-size, p_color);
 		}
 		return result;
 	}
@@ -162,38 +159,32 @@ public:
 		return danger;
 	}
 
-	int ai(int size, int level) {
-		int result = -1;
-#define plus ((FindVar(i, First))->n)->inc('r')
+	void ai(int size, int level) {
+	#define plus \
+		if (((FindVar(i, First))->n)->inc('r')) \
+			explosion(size, i, 'r'); \
+		turn = false;
+
 		srand(time(NULL));
-		for (int i = 0; i<(size*size); i++) {
+		bool turn = true;
+		for (int i = 0; (i<(size*size))&&(turn); i++) {
 			// dont make the cell explodable
 			if (!(((FindVar(i, First))->n)->value == ((FindVar(i, First))->n)->thr - 1))
 				switch (level) {
 				case 0:
-					if (plus) {
-						result = i;
-						explosion(size, i, 'r');
-					}
+					{plus}
 					break;
 				case 1:
 					// 50-50 decision
-					if ((rand() % 1) && (!(danger(size, i))))
-					if (plus) {
-						result = i;
-						explosion(size, i, 'r');
-					}
+					if ((rand() % 2) && (!(danger(size, i))))
+					{plus}
 					break;
 				case 2:
 					// check if it can be *safely* exploded
 					if (!(danger(size, i)))
-					if (plus) {
-						result = i;
-						explosion(size, i, 'r');
-					}
+					{plus}
 			}
 		}
-		return result;
 	}
 
 	int GetScore(char p_color) {
@@ -208,5 +199,18 @@ public:
 		} while (srch);
 		return result;
 	}
+
+	// DEBUGGING function, not used in project
+	// for convenient obtaining of current array values
+	int* CheckValues(Settings^ settings) {
+		TVar ^var = First;
+		int size = settings->size*settings->size;
+		int* result = new int[settings->size*settings->size];
+		if (var)
+			for (int i = size - 1; (i >= 0) && (var); i--, var = var->next) {
+				result[i] = (int)(var->n->Tag); // choose what to get from array
+			}
+			return result;
+		}
 
 };
